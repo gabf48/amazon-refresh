@@ -9,8 +9,8 @@ from selenium.webdriver.chrome.options import Options
 
 
 # Fișierul pentru configurarea browser-ului
-@pytest.fixture(scope="function")
-def browser(request):
+@pytest.fixture(scope="session")
+def browser():
     # Configurăm opțiunile pentru fiecare instanță de browser
     chrome_options = Options()
     chrome_options.add_argument("--disable-search-engine-choice-screen")
@@ -24,7 +24,12 @@ def browser(request):
 
 
 @pytest.mark.repeat(4)
-def test_auto_refresh(browser):
+def test_auto_refresh(browser, request):
+    # Logăm worker-ul folosind un marker unic din pytest-xdist
+    worker_id = request.config.getoption("--dist")  # Accesăm opțiunea de distribuire
+
+    print(f"Running on worker {worker_id}")
+
     login = Login(browser)
     login.login()
 
