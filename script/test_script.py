@@ -30,14 +30,14 @@ def run_instance(instance_id):
     driver.get("https://relay.amazon.de/loadboard/search")
     driver.maximize_window()
 
-    button_selector_xpath = "//p[contains(normalize-space(text()), 'refresh')]"
+    button_selector_css = '[class="refresh-and-chat-box"]'
 
     while True:
         try:
             WebDriverWait(driver, 60).until(
-                EC.element_to_be_clickable((By.XPATH, button_selector_xpath))
+                EC.element_to_be_clickable((By.CSS_SELECTOR, button_selector_css))
             )
-            button = driver.find_element(By.XPATH, button_selector_xpath)
+            button = driver.find_element(By.CSS_SELECTOR, button_selector_css)
             button.click()
         except Exception:
             pass
@@ -45,7 +45,7 @@ def run_instance(instance_id):
 
 if __name__ == '__main__':
     processes = []
-    for i in range(4):
+    for i in range(1):
         p = Process(target=run_instance, args=(i+1,))
         p.start()
         processes.append(p)
